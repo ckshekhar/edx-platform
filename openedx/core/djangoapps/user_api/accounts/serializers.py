@@ -106,6 +106,7 @@ class UserReadOnlySerializer(serializers.Serializer):  # lint-amnesty, pylint: d
     def __init__(self, *args, **kwargs):
         # Don't pass the 'configuration' arg up to the superclass
         self.configuration = kwargs.pop('configuration', None)
+
         if not self.configuration:
             self.configuration = settings.ACCOUNT_VISIBILITY_CONFIGURATION
 
@@ -136,6 +137,10 @@ class UserReadOnlySerializer(serializers.Serializer):  # lint-amnesty, pylint: d
         except ObjectDoesNotExist:
             activation_key = None
 
+        # Get the account deletion configuration
+        enable_account_deletion = configuration_helpers.get_value(
+            'ENABLE_ACCOUNT_DELETION', settings.FEATURES.get('ENABLE_ACCOUNT_DELETION', False))
+        
         accomplishments_shared = badges_enabled()
         data = {
             "username": user.username,
@@ -171,6 +176,7 @@ class UserReadOnlySerializer(serializers.Serializer):  # lint-amnesty, pylint: d
             "phone_number": None,
             "pending_name_change": None,
             "verified_name": None,
+            "enable_account_deletion": enable_account_deletion,
         }
 
         if user_profile:

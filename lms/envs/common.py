@@ -4187,6 +4187,7 @@ ACCOUNT_VISIBILITY_CONFIGURATION["admin_fields"] = (
         "phone_number",
         "activation_key",
         "pending_name_change",
+        "enable_account_deletion"
     ]
 )
 
